@@ -1,71 +1,75 @@
 {
-    "openapi": "3.0.0",
-    "components": {
-        "examples": {},
-        "headers": {},
-        "parameters": {},
-        "requestBodies": {},
-        "responses": {},
-        "schemas": {
-            "Health": {
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": ["message"],
-                "type": "object",
-                "additionalProperties": true
-            }
-        },
-        "securitySchemes": {}
-    },
-    "info": {
-        "title": "gozem",
-        "version": "1.0.0",
-        "description": "Package Tracker Application",
-        "license": {
-            "name": "ISC"
-        },
-        "contact": {
-            "name": "nkoachristophe@gmail.com"
-        }
-    },
-    "paths": {
-        "/api/health": {
-            "get": {
-                "operationId": "GetHealth",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Health"
-                                },
-                                "examples": {
-                                    "Example 1": {
-                                        "value": [
-                                            {
-                                                "message": "pong"
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Test if API is available",
-                "tags": ["Health Controller Operations"],
-                "security": [],
-                "parameters": []
-            }
-        }
-    },
-    "servers": [
-        {
-            "url": "/"
-        }
-    ]
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"Health": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": true
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "gozem",
+		"version": "1.0.0",
+		"description": "Package Tracker Application",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {
+			"name": "nkoachristophe@gmail.com"
+		}
+	},
+	"paths": {
+		"/api/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Health"
+								},
+								"examples": {
+									"Example 1": {
+										"value": [
+											{
+												"message": "pong"
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Test if API is available",
+				"tags": [
+					"Health Controller Operations"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
 }
