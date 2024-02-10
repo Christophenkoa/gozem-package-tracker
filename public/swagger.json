@@ -1,75 +1,180 @@
 {
-	"openapi": "3.0.0",
-	"components": {
-		"examples": {},
-		"headers": {},
-		"parameters": {},
-		"requestBodies": {},
-		"responses": {},
-		"schemas": {
-			"Health": {
-				"properties": {
-					"message": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": true
-			}
-		},
-		"securitySchemes": {}
-	},
-	"info": {
-		"title": "gozem",
-		"version": "1.0.0",
-		"description": "Package Tracker Application",
-		"license": {
-			"name": "ISC"
-		},
-		"contact": {
-			"name": "nkoachristophe@gmail.com"
-		}
-	},
-	"paths": {
-		"/api/health": {
-			"get": {
-				"operationId": "GetHealth",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/Health"
-								},
-								"examples": {
-									"Example 1": {
-										"value": [
-											{
-												"message": "pong"
-											}
-										]
-									}
-								}
-							}
-						}
-					}
-				},
-				"description": "Test if API is available",
-				"tags": [
-					"Health Controller Operations"
-				],
-				"security": [],
-				"parameters": []
-			}
-		}
-	},
-	"servers": [
-		{
-			"url": "/"
-		}
-	]
+    "openapi": "3.0.0",
+    "components": {
+        "examples": {},
+        "headers": {},
+        "parameters": {},
+        "requestBodies": {},
+        "responses": {},
+        "schemas": {
+            "mongoose.Types.ObjectId": {
+                "type": "string"
+            },
+            "UserType": {
+                "properties": {
+                    "_id": {
+                        "$ref": "#/components/schemas/mongoose.Types.ObjectId"
+                    },
+                    "avatarUrl": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/mongoose.Types.ObjectId"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": true
+            },
+            "Health": {
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": ["message"],
+                "type": "object",
+                "additionalProperties": true
+            }
+        },
+        "securitySchemes": {}
+    },
+    "info": {
+        "title": "gozem",
+        "version": "1.0.0",
+        "description": "Package Tracker Application",
+        "license": {
+            "name": "ISC"
+        },
+        "contact": {
+            "name": "nkoachristophe@gmail.com"
+        }
+    },
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "operationId": "Login",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "user": {
+                                                    "$ref": "#/components/schemas/UserType"
+                                                }
+                                            },
+                                            "required": ["token", "user"],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "statusCode": {
+                                                    "type": "number",
+                                                    "format": "double"
+                                                },
+                                                "error": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": ["statusCode", "error"],
+                                            "type": "object"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "Example 1": {
+                                        "value": {
+                                            "user": {
+                                                "email": "admin@gmail.com",
+                                                "firstName": "Tamo",
+                                                "lastName": "Junior",
+                                                "password": "$2a$12$iaBpgvFpWr33/tpjrPP86uGjMbI3XZR6ui0uQrZlqzAxcKhrLzHF."
+                                            },
+                                            "token": "eyJNzU2OTk0MCwiZXhwIjoxNzA4MTc0NzQwfQ.FpFr5"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Authentication Controller.",
+                "tags": ["Authentication Controller Operations"],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["password", "email"],
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/health": {
+            "get": {
+                "operationId": "GetHealth",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Health"
+                                },
+                                "examples": {
+                                    "Example 1": {
+                                        "value": [
+                                            {
+                                                "message": "pong"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Test if API is available",
+                "tags": ["Health Controller Operations"],
+                "security": [],
+                "parameters": []
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ]
 }

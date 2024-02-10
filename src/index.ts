@@ -1,9 +1,9 @@
 import express from 'express'
+import swaggerUi from 'swagger-ui-express'
 import { APPCONFIGS } from './configs'
 import routes from './routes'
 import Mongo from './mongo'
-import { User } from './models/user'
-import { UserType } from './types'
+import Bootstrap from './bootstrap'
 
 const cors = require('cors')
 
@@ -27,23 +27,36 @@ class Server {
         this.app.use(express.json())
         this.app.use(express.static('public'))
 
+        this.app.use(
+            '/docs',
+            swaggerUi.serve,
+            swaggerUi.setup(undefined, {
+                swaggerOptions: {
+                    url: '/swagger.json',
+                },
+            })
+        )
+
         routes(this.app)
     }
 
     public connectMongoDb(): void {
-        const mongo = new Mongo();
-			mongo
-				.connect()
-				.then(() => {
-					console.log("MongoDB Connection Established");
-				})
-				.catch((err) => console.log("MongoDB not Connected", err));
+        const mongo = new Mongo()
+        mongo
+            .connect()
+            .then(() => {
+                console.log('MongoDB Connection Established')
+
+                // Bootstrap data.
+                new Bootstrap().start()
+            })
+            .catch((err) => console.log('MongoDB not Connected', err))
     }
 
     public start(): void {
         this.app.listen(this.app.get('port'), () => {
             console.log('Server listening in port', APPCONFIGS.PORT)
-            this.connectMongoDb();
+            this.connectMongoDb()
         })
     }
 }
