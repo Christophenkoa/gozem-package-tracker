@@ -1,6 +1,9 @@
 import express from 'express'
 import { APPCONFIGS } from './configs'
 import routes from './routes'
+import Mongo from './mongo'
+import { User } from './models/user'
+import { UserType } from './types'
 
 const cors = require('cors')
 
@@ -27,9 +30,20 @@ class Server {
         routes(this.app)
     }
 
+    public connectMongoDb(): void {
+        const mongo = new Mongo();
+			mongo
+				.connect()
+				.then(() => {
+					console.log("MongoDB Connection Established");
+				})
+				.catch((err) => console.log("MongoDB not Connected", err));
+    }
+
     public start(): void {
         this.app.listen(this.app.get('port'), () => {
             console.log('Server listening in port', APPCONFIGS.PORT)
+            this.connectMongoDb();
         })
     }
 }

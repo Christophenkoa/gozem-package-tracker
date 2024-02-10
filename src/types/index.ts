@@ -1,3 +1,4 @@
 import { Health } from './health'
+import { UserType } from './user'
 
-export { Health }
+export { Health, UserType }
