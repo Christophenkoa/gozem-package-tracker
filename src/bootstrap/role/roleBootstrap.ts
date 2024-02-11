@@ -22,9 +22,11 @@ export class RoleBootstrap {
         const existingRoles = await roleService.getRoles()
 
         if (existingRoles.length === 0) {
-            users.forEach(async (role) => {
-                await roleService.addRole(role)
-            })
+            await Promise.all(
+                users.map(async (role) => {
+                    return await roleService.addRole(role)
+                })
+            )
 
             console.log('roles bootstrapped')
         }

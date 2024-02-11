@@ -173,7 +173,7 @@ export default class Mongo<M> {
     public async updateByID(
         element: M,
         Model: Model<M>,
-        elementID: Schema.Types.ObjectId
+        elementID: any
     ): Promise<M | { error: string }> {
         try {
             const updatedElement = await Model.findByIdAndUpdate(
@@ -237,7 +237,7 @@ export default class Mongo<M> {
     }
 
     public async getById(
-        elementID: Schema.Types.ObjectId,
+        elementID: any,
         Model: Model<M>
     ): Promise<M | undefined> {
         try {
@@ -272,7 +272,7 @@ export default class Mongo<M> {
     }
 
     public async deleteById(
-        elementID: Schema.Types.ObjectId,
+        elementID: any,
         Model: Model<M>
     ): Promise<M | undefined> {
         try {

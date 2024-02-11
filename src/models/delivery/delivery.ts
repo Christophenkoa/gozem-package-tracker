@@ -1,15 +1,10 @@
 import mongoose from 'mongoose'
-import {
-    DeliveryStatus,
-    DeliveryType,
-    PackageType,
-    UserType,
-} from '../../types'
+import { DeliveryStatus, DeliveryType } from '../../types'
 const Schema = mongoose.Schema
 
 const deliverySchema = new Schema<DeliveryType>({
     package_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'Package',
     },
     pickup_time: {
@@ -22,8 +17,8 @@ const deliverySchema = new Schema<DeliveryType>({
         type: Date,
     },
     location: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Location',
+        type: Map,
+        of: String,
     },
     status: {
         type: String,

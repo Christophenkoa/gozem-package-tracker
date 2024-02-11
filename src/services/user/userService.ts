@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import { User } from '../../models'
+import { CustomUser } from '../../models'
 import Mongo from '../../mongo'
 import { UserType } from '../../types'
 
@@ -11,13 +11,13 @@ export default class UserService {
     }
 
     public async getUsers(): Promise<UserType[] | []> {
-        return await this._mongoUserService.getAll(User)
+        return await this._mongoUserService.getAll(CustomUser)
     }
 
     public async getUserByEmail(email: string): Promise<UserType | undefined> {
         const user: UserType | undefined = await this._mongoUserService.getOne(
             { email: email },
-            User,
+            CustomUser,
             ['role']
         )
         return user
@@ -28,7 +28,7 @@ export default class UserService {
     ): Promise<UserType | undefined> {
         const user: UserType | undefined = await this._mongoUserService.getById(
             id,
-            User
+            CustomUser
         )
         return user
     }
@@ -43,7 +43,7 @@ export default class UserService {
         const result = await this._mongoUserService.updateByUniqueProp(
             { email: email },
             data,
-            User
+            CustomUser
         )
 
         if ('error' in result) {
@@ -62,7 +62,7 @@ export default class UserService {
             return undefined
         }
 
-        const newUser = await this._mongoUserService.add(user, User)
+        const newUser = await this._mongoUserService.add(user, CustomUser)
 
         if ('error' in newUser) {
             return undefined

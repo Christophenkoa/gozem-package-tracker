@@ -19,7 +19,7 @@ const userSchema = new Schema<UserType>({
         type: String,
     },
     role: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'Role',
     },
 })
@@ -28,4 +28,4 @@ userSchema.set('toJSON', {
     virtuals: true,
 })
 
-export const User = mongoose.model<UserType>('User', userSchema)
+export const CustomUser = mongoose.model<UserType>('CustomUser', userSchema)

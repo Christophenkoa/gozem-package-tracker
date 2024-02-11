@@ -1,7 +1,6 @@
 import { Delivery } from './delivery'
-import { Location } from './location'
 import { Package } from './package'
 import { Role } from './role'
-import { User } from './user'
+import { CustomUser } from './user'
 
-export { User, Role, Package, Location, Delivery }
+export { CustomUser, Role, Package, Delivery }

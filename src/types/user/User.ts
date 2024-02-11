@@ -7,5 +7,5 @@ export default interface UserType {
     firstName?: string
     lastName?: string
     password?: string
-    role?: Types.ObjectId
+    role?: string
 }

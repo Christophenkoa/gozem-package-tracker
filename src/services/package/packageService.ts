@@ -20,7 +20,7 @@ export default class PackageService {
     }
 
     public async getPackageByID(
-        id: Schema.Types.ObjectId
+        id: string
     ): Promise<{ data: PackageType } | { statusCode: number; error: string }> {
         if (!id) {
             return {
@@ -63,10 +63,7 @@ export default class PackageService {
         }
     }
 
-    public async updatePackage(
-        data: PackageType,
-        packageId: Schema.Types.ObjectId
-    ) {
+    public async updatePackage(data: PackageType, packageId: string) {
         if (!packageId) {
             return {
                 error: "package's id is required.",
@@ -94,10 +91,22 @@ export default class PackageService {
         }
     }
 
-    public async deletePackage(packageId: Schema.Types.ObjectId) {
+    public async deletePackage(packageId: string) {
         if (!packageId) {
             return {
                 error: "package's id is required.",
+                statusCode: ResponseCode.HTTP_404_NOT_FOUND,
+            }
+        }
+
+        const existingPackage = await this._mongoPackageService.getById(
+            packageId,
+            Package
+        )
+
+        if (!existingPackage) {
+            return {
+                error: 'This package does not exist',
                 statusCode: ResponseCode.HTTP_404_NOT_FOUND,
             }
         }

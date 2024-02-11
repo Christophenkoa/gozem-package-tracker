@@ -1,7 +1,6 @@
 import { Body, Example, Post, Route, Tags } from 'tsoa'
 import { UserType } from '../../types'
 import { AuthService } from '../../services'
-import { APPCONFIGS } from '../../configs'
 
 @Route('api/auth')
 @Tags('Authentication Controller Operations')

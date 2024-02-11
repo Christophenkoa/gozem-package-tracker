@@ -1,180 +1,1072 @@
 {
-    "openapi": "3.0.0",
-    "components": {
-        "examples": {},
-        "headers": {},
-        "parameters": {},
-        "requestBodies": {},
-        "responses": {},
-        "schemas": {
-            "mongoose.Types.ObjectId": {
-                "type": "string"
-            },
-            "UserType": {
-                "properties": {
-                    "_id": {
-                        "$ref": "#/components/schemas/mongoose.Types.ObjectId"
-                    },
-                    "avatarUrl": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "firstName": {
-                        "type": "string"
-                    },
-                    "lastName": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "role": {
-                        "$ref": "#/components/schemas/mongoose.Types.ObjectId"
-                    }
-                },
-                "type": "object",
-                "additionalProperties": true
-            },
-            "Health": {
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": ["message"],
-                "type": "object",
-                "additionalProperties": true
-            }
-        },
-        "securitySchemes": {}
-    },
-    "info": {
-        "title": "gozem",
-        "version": "1.0.0",
-        "description": "Package Tracker Application",
-        "license": {
-            "name": "ISC"
-        },
-        "contact": {
-            "name": "nkoachristophe@gmail.com"
-        }
-    },
-    "paths": {
-        "/api/auth/login": {
-            "post": {
-                "operationId": "Login",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "anyOf": [
-                                        {
-                                            "properties": {
-                                                "token": {
-                                                    "type": "string"
-                                                },
-                                                "user": {
-                                                    "$ref": "#/components/schemas/UserType"
-                                                }
-                                            },
-                                            "required": ["token", "user"],
-                                            "type": "object"
-                                        },
-                                        {
-                                            "properties": {
-                                                "statusCode": {
-                                                    "type": "number",
-                                                    "format": "double"
-                                                },
-                                                "error": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": ["statusCode", "error"],
-                                            "type": "object"
-                                        }
-                                    ]
-                                },
-                                "examples": {
-                                    "Example 1": {
-                                        "value": {
-                                            "user": {
-                                                "email": "admin@gmail.com",
-                                                "firstName": "Tamo",
-                                                "lastName": "Junior",
-                                                "password": "$2a$12$iaBpgvFpWr33/tpjrPP86uGjMbI3XZR6ui0uQrZlqzAxcKhrLzHF."
-                                            },
-                                            "token": "eyJNzU2OTk0MCwiZXhwIjoxNzA4MTc0NzQwfQ.FpFr5"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Authentication Controller.",
-                "tags": ["Authentication Controller Operations"],
-                "security": [],
-                "parameters": [],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "password": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": ["password", "email"],
-                                "type": "object"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/health": {
-            "get": {
-                "operationId": "GetHealth",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Health"
-                                },
-                                "examples": {
-                                    "Example 1": {
-                                        "value": [
-                                            {
-                                                "message": "pong"
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Test if API is available",
-                "tags": ["Health Controller Operations"],
-                "security": [],
-                "parameters": []
-            }
-        }
-    },
-    "servers": [
-        {
-            "url": "/"
-        }
-    ]
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"mongoose.Types.ObjectId": {
+				"type": "string"
+			},
+			"UserType": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"avatarUrl": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": true
+			},
+			"LocationType": {
+				"properties": {
+					"lat": {
+						"type": "number",
+						"format": "double"
+					},
+					"lng": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": true
+			},
+			"DeliveryStatus": {
+				"enum": [
+					"OPEN",
+					"PICK_UP",
+					"IN_TRANSIT",
+					"DELIVERED",
+					"FAILED"
+				],
+				"type": "string"
+			},
+			"DeliveryType": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"package_id": {
+						"type": "string"
+					},
+					"pickup_time": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"start_time": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"end_time": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"location": {
+						"$ref": "#/components/schemas/LocationType"
+					},
+					"status": {
+						"$ref": "#/components/schemas/DeliveryStatus"
+					}
+				},
+				"required": [
+					"pickup_time",
+					"start_time",
+					"end_time",
+					"location",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"Health": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"PackageType": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"active_delivery_id": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"weight": {
+						"type": "number",
+						"format": "double"
+					},
+					"width": {
+						"type": "number",
+						"format": "double"
+					},
+					"height": {
+						"type": "number",
+						"format": "double"
+					},
+					"depth": {
+						"type": "number",
+						"format": "double"
+					},
+					"from_name": {
+						"type": "string"
+					},
+					"from_address": {
+						"type": "string"
+					},
+					"from_location": {
+						"$ref": "#/components/schemas/LocationType"
+					},
+					"to_name": {
+						"type": "string"
+					},
+					"to_address": {
+						"type": "string"
+					},
+					"to_location": {
+						"$ref": "#/components/schemas/LocationType"
+					}
+				},
+				"type": "object",
+				"additionalProperties": true
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "gozem",
+		"version": "1.0.0",
+		"description": "Package Tracker Application",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {
+			"name": "nkoachristophe@gmail.com"
+		}
+	},
+	"paths": {
+		"/api/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"token": {
+													"type": "string"
+												},
+												"user": {
+													"$ref": "#/components/schemas/UserType"
+												}
+											},
+											"required": [
+												"token",
+												"user"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												},
+												"error": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"statusCode",
+												"error"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"user": {
+												"email": "admin@gmail.com",
+												"firstName": "Tamo",
+												"lastName": "Junior",
+												"password": "$2a$12$iaBpgvFpWr33/tpjrPP86uGjMbI3XZR6ui0uQrZlqzAxcKhrLzHF."
+											},
+											"token": "eyJNzU2OTk0MCwiZXhwIjoxNzA4MTc0NzQwfQ.FpFr5"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Authentication Controller.",
+				"tags": [
+					"Authentication Controller Operations"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"password": {
+										"type": "string"
+									},
+									"email": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"password",
+									"email"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/delivery": {
+			"get": {
+				"operationId": "GetDeliveries",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"data": {
+											"items": {
+												"$ref": "#/components/schemas/DeliveryType"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"data"
+									],
+									"type": "object"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": [
+												{
+													"package_id": "4edd40c86762e0fb12000003",
+													"pickup_time": "2021-03-25T00:00:00.000Z",
+													"start_time": "2021-03-25T00:00:00.000Z",
+													"end_time": "2021-03-26T00:00:00.000Z",
+													"location": {
+														"lng": 0.000001,
+														"lat": 0.983
+													},
+													"status": "IN_TRANSIT"
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Delivery Controller Operations"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateDelivery",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/DeliveryType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"package_id": "4edd40c86762e0fb12000003",
+												"pickup_time": "2021-03-25T00:00:00.000Z",
+												"start_time": "2021-03-25T00:00:00.000Z",
+												"end_time": "2021-03-26T00:00:00.000Z",
+												"location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"status": "IN_TRANSIT"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Delivery Controller Operations"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeliveryType"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/delivery/{deliveryId}": {
+			"get": {
+				"operationId": "GetDelivery",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/DeliveryType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"package_id": "4edd40c86762e0fb12000003",
+												"pickup_time": "2021-03-25T00:00:00.000Z",
+												"start_time": "2021-03-25T00:00:00.000Z",
+												"end_time": "2021-03-26T00:00:00.000Z",
+												"location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"status": "IN_TRANSIT"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Delivery Controller Operations"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deliveryId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateDelivery",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/DeliveryType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"package_id": "4edd40c86762e0fb12000003",
+												"pickup_time": "2021-03-25T00:00:00.000Z",
+												"start_time": "2021-03-25T00:00:00.000Z",
+												"end_time": "2021-03-26T00:00:00.000Z",
+												"location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"status": "IN_TRANSIT"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Delivery Controller Operations"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deliveryId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/DeliveryType"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteDelivery",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/DeliveryType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"package_id": "4edd40c86762e0fb12000003",
+												"pickup_time": "2021-03-25T00:00:00.000Z",
+												"start_time": "2021-03-25T00:00:00.000Z",
+												"end_time": "2021-03-26T00:00:00.000Z",
+												"location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"status": "IN_TRANSIT"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Delivery Controller Operations"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "deliveryId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Health"
+								},
+								"examples": {
+									"Example 1": {
+										"value": [
+											{
+												"message": "pong"
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Test if API is available",
+				"tags": [
+					"Health Controller Operations"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/package": {
+			"get": {
+				"operationId": "GetPackages",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"data": {
+											"items": {
+												"$ref": "#/components/schemas/PackageType"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"data"
+									],
+									"type": "object"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": [
+												{
+													"active_delivery_id": "4edd40c86762e0fb12000003",
+													"depth": 12,
+													"description": "package's description",
+													"height": 0.1,
+													"to_address": "Kribi",
+													"to_name": "Jimmy",
+													"weight": 12,
+													"width": 2,
+													"from_name": "Chris",
+													"from_address": "Bonaberi",
+													"from_location": {
+														"lng": 0.000001,
+														"lat": 0.983
+													},
+													"to_location": {
+														"lng": 1.2,
+														"lat": 0.23
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Package Controller Operations"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreatePackage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/PackageType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"active_delivery_id": "4edd40c86762e0fb12000003",
+												"depth": 12,
+												"description": "package's description",
+												"height": 0.1,
+												"to_address": "Kribi",
+												"to_name": "Jimmy",
+												"weight": 12,
+												"width": 2,
+												"from_name": "Chris",
+												"from_address": "Bonaberi",
+												"from_location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"to_location": {
+													"lng": 1.2,
+													"lat": 0.23
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Package Controller Operations"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PackageType"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/package/{packageId}": {
+			"get": {
+				"operationId": "GetPackage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/PackageType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"active_delivery_id": "4edd40c86762e0fb12000003",
+												"depth": 12,
+												"description": "package's description",
+												"height": 0.1,
+												"to_address": "Kribi",
+												"to_name": "Jimmy",
+												"weight": 12,
+												"width": 2,
+												"from_name": "Chris",
+												"from_address": "Bonaberi",
+												"from_location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"to_location": {
+													"lng": 1.2,
+													"lat": 0.23
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Package Controller Operations"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "packageId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdatePackage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/PackageType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"active_delivery_id": "4edd40c86762e0fb12000003",
+												"depth": 12,
+												"description": "package's description",
+												"height": 0.1,
+												"to_address": "Kribi",
+												"to_name": "Jimmy",
+												"weight": 12,
+												"width": 2,
+												"from_name": "Chris",
+												"from_address": "Bonaberi",
+												"from_location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"to_location": {
+													"lng": 1.2,
+													"lat": 0.23
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Package Controller Operations"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "packageId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PackageType"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeletePackage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"data": {
+													"$ref": "#/components/schemas/PackageType"
+												}
+											},
+											"required": [
+												"data"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {
+													"type": "string"
+												},
+												"statusCode": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"error",
+												"statusCode"
+											],
+											"type": "object"
+										}
+									]
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"data": {
+												"active_delivery_id": "4edd40c86762e0fb12000003",
+												"depth": 12,
+												"description": "package's description",
+												"height": 0.1,
+												"to_address": "Kribi",
+												"to_name": "Jimmy",
+												"weight": 12,
+												"width": 2,
+												"from_name": "Chris",
+												"from_address": "Bonaberi",
+												"from_location": {
+													"lng": 0.000001,
+													"lat": 0.983
+												},
+												"to_location": {
+													"lng": 1.2,
+													"lat": 0.23
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Package Controller Operations"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "packageId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
 }

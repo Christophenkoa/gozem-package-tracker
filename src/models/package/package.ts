@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const packageSchema = new Schema<PackageType>({
     active_delivery_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'Delivery',
     },
     description: {
@@ -29,8 +29,8 @@ const packageSchema = new Schema<PackageType>({
         type: String,
     },
     from_location: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Location',
+        type: Map,
+        of: String,
     },
     to_name: {
         type: String,
@@ -39,8 +39,8 @@ const packageSchema = new Schema<PackageType>({
         type: String,
     },
     to_location: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Location',
+        type: Map,
+        of: String,
     },
 })
 

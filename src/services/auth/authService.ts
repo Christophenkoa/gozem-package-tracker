@@ -1,4 +1,3 @@
-import { User } from '../../models'
 import { APPCONFIGS } from '../../configs'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'

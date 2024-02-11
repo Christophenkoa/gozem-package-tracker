@@ -1,5 +1,5 @@
 import { RoleService, UserService } from '../../services'
-import { UserType } from '../../types'
+import { RoleType, UserType } from '../../types'
 
 const users: UserType[] = [
     {
@@ -31,26 +31,22 @@ export class UserBootstrap {
         const existingUsers = await userService.getUsers()
 
         const userRoles = await new RoleService().getRoles()
-        let roleIndex = 0
+        let adminRole: RoleType, customerRole: RoleType, driverRole: RoleType
 
         if (existingUsers.length === 0) {
             users.forEach(async (user) => {
-                const adminRole = userRoles.find(
-                    (role) => role.name === 'admin'
-                )
-                const customerRole = userRoles.find(
+                adminRole = userRoles.find((role) => role.name === 'admin')
+                customerRole = userRoles.find(
                     (role) => role.name === 'customer'
                 )
-                const driverRole = userRoles.find(
-                    (role) => role.name === 'driver'
-                )
+                driverRole = userRoles.find((role) => role.name === 'driver')
 
                 if (user.email.includes('admin')) {
-                    user.role = adminRole._id
+                    user.role = adminRole?._id.toHexString()
                 } else if (user.email.includes('driver')) {
-                    user.role = driverRole._id
+                    user.role = driverRole?._id.toHexString()
                 } else if (user.email.includes('customer')) {
-                    user.role = customerRole._id
+                    user.role = customerRole?._id.toHexString()
                 }
 
                 await userService.addUser(user)

@@ -1,4 +1,3 @@
-import { Schema } from 'mongoose'
 import { Delivery } from '../../models'
 import Mongo from '../../mongo'
 import { DeliveryType } from '../../types'
@@ -19,7 +18,7 @@ export default class DeliveryService {
     }
 
     public async getDeliveryByID(
-        id: Schema.Types.ObjectId
+        id: string
     ): Promise<{ data: DeliveryType } | { statusCode: number; error: string }> {
         if (!id) {
             return {
@@ -64,7 +63,7 @@ export default class DeliveryService {
 
     public async updateDelivery(
         data: DeliveryType,
-        deliveryId: Schema.Types.ObjectId
+        deliveryId: string
     ): Promise<{ data: DeliveryType } | { statusCode: number; error: string }> {
         if (!deliveryId) {
             return {
@@ -94,11 +93,23 @@ export default class DeliveryService {
     }
 
     public async deleteDelivery(
-        deliveryId: Schema.Types.ObjectId
+        deliveryId: string
     ): Promise<{ data: DeliveryType } | { statusCode: number; error: string }> {
         if (!deliveryId) {
             return {
                 error: "delivery's id is required.",
+                statusCode: ResponseCode.HTTP_404_NOT_FOUND,
+            }
+        }
+
+        const existingDelivery = await this._mongoDeliveryService.getById(
+            deliveryId,
+            Delivery
+        )
+
+        if (!existingDelivery) {
+            return {
+                error: 'This delivery does not exist',
                 statusCode: ResponseCode.HTTP_404_NOT_FOUND,
             }
         }
