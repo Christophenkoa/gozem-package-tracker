@@ -9,7 +9,7 @@ class MySocket {
     })
 
     public async connect() {
-        this._io.on('connection', (socket) => {
+        this._io.on('connection', (socket: Socket) => {
             console.log(socket.id)
             this.locationChanged(socket)
             this.statusChanged(socket)
