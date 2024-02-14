@@ -28,28 +28,33 @@ class MySocket {
                 delivery_id: string
                 location: LocationType
             }) => {
-                const deliveryService = new DeliveryService();
-                let delivery: DeliveryType;
-                const result = await deliveryService.getDeliveryByID(payload.delivery_id);
-                if("error" in result) {
+                const deliveryService = new DeliveryService()
+                let delivery: DeliveryType
+                const result = await deliveryService.getDeliveryByID(
+                    payload.delivery_id
+                )
+                if ('error' in result) {
                     console.log(result.error)
                 } else {
-                    delivery = result.data;
-                    delivery.location = payload.location;
+                    delivery = result.data
+                    delivery.location = payload.location
 
-                    if(delivery.location != payload.location) {
-                        const updatedDelivery = await deliveryService
-                        .updateDelivery(delivery, payload.delivery_id);
-                    
-                        if("error" in updatedDelivery) {
-                            console.log(updatedDelivery.error);
+                    if (delivery.location != payload.location) {
+                        const updatedDelivery =
+                            await deliveryService.updateDelivery(
+                                delivery,
+                                payload.delivery_id
+                            )
+
+                        if ('error' in updatedDelivery) {
+                            console.log(updatedDelivery.error)
                         }
                     }
                 }
-                this.deliveryUpdated(socket, {
+                this.deliveryUpdated({
                     event: Connection.delivery_updated,
-                    delivery_object: delivery
-                });
+                    delivery_object: delivery,
+                })
             }
         )
     }
@@ -57,46 +62,55 @@ class MySocket {
     public async statusChanged(socket: Socket) {
         socket.on(
             Connection.status_changed,
-            async (payload: { event: string; delivery_id: string; status: DeliveryStatus }) => {
-                const deliveryService = new DeliveryService();
-                let driverDelivery: DeliveryType;
-                const result = await deliveryService.getDeliveryByID(payload.delivery_id);
-                if("error" in result) {
+            async (payload: {
+                event: string
+                delivery_id: string
+                status: DeliveryStatus
+            }) => {
+                const deliveryService = new DeliveryService()
+                let driverDelivery: DeliveryType
+                const result = await deliveryService.getDeliveryByID(
+                    payload.delivery_id
+                )
+                if ('error' in result) {
                     console.log(result.error)
                 } else {
-                    driverDelivery = result.data;
+                    driverDelivery = result.data
 
-                    if(payload.status !== driverDelivery.status) {
-
+                    if (payload.status !== driverDelivery.status) {
                         //TODO: Check if the status change is allowed.
-                        driverDelivery.status = payload.status;
+                        driverDelivery.status = payload.status
 
-                        const updatedDelivery = await deliveryService
-                            .updateDelivery(driverDelivery, payload.delivery_id);
-                        
-                        if("error" in updatedDelivery) {
-                            console.log(updatedDelivery.error);
+                        const updatedDelivery =
+                            await deliveryService.updateDelivery(
+                                driverDelivery,
+                                payload.delivery_id
+                            )
+
+                        if ('error' in updatedDelivery) {
+                            console.log(updatedDelivery.error)
                         }
                     }
                 }
-                this.deliveryUpdated(socket, {
+                this.deliveryUpdated({
                     event: Connection.delivery_updated,
-                    delivery_object: driverDelivery
-                });
+                    delivery_object: driverDelivery,
+                })
 
-                this.deliveryUpdated(socket, {
+                this.deliveryUpdated({
                     event: Connection.delivery_updated,
-                    delivery_object: driverDelivery
+                    delivery_object: driverDelivery,
                 })
             }
         )
     }
 
-    public async deliveryUpdated(
-        socket: Socket,
-        payload: { event: string; delivery_object: DeliveryType }
-    ) {
-        socket.emit(Connection.delivery_updated, payload)
+    public async deliveryUpdated(payload: {
+        event: string
+        delivery_object: DeliveryType
+    }) {
+        console.log(payload)
+        this._io.sockets.emit(Connection.delivery_updated, payload)
     }
 }
 
