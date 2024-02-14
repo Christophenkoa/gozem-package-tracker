@@ -4,6 +4,7 @@ import { APPCONFIGS } from './configs'
 import routes from './routes'
 import Mongo from './mongo'
 import Bootstrap from './bootstrap'
+import { socket } from './socket'
 
 const cors = require('cors')
 
@@ -57,6 +58,7 @@ class Server {
         this.app.listen(this.app.get('port'), () => {
             console.log('Server listening in port', APPCONFIGS.PORT)
             this.connectMongoDb()
+            socket.connect()
         })
     }
 }
