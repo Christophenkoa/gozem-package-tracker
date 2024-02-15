@@ -6,8 +6,6 @@
     "scripts": {
         "format:write": "prettier --write .",
         "format:check": "prettier --check .",
-        "lint:check": "eslint .",
-        "lint:fix": "eslint --fix .",
         "start": "node build/index.js",
         "predev": "npm run swagger",
         "prebuild": "npm run swagger",
