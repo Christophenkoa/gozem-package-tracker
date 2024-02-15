@@ -11,15 +11,15 @@
 - complete authentication flow
 
 ## credentials:
-admin: 
+- admin: 
   email: admin@gmail.com
   password: password
 
-customer: 
+- customer: 
   email: customer@gmail.com
   password: password
 
-driver: 
+- driver: 
   email: driver@gmail.com
   password: password
 
