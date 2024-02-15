@@ -8,7 +8,8 @@
 - dockerize everything and run the 2 repo once with `docker-compose`
 - Use [Mongo cloud Atlas](https://www.mongodb.com/cloud/atlas) to host the database.
 - Complete unit test and create a fake database for testing.
-- complete authentication flow
+- complete authentication flow.
+- Use google map for better displayment of the map and proper `form input` to get longitude and latitude.
 
 ## Credentials:
 - admin: 
