@@ -2,6 +2,7 @@ import { Delivery } from '../../models'
 import Mongo from '../../mongo'
 import { DeliveryStatus, DeliveryType } from '../../types'
 import { ResponseCode } from '../../utils'
+import { PackageService } from '../package'
 
 export default class DeliveryService {
     private _mongoDeliveryService: Mongo<DeliveryType>
@@ -53,6 +54,36 @@ export default class DeliveryService {
             return {
                 error: `Fail to add delivery`,
                 statusCode: ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR,
+            }
+        }
+
+        const packageId = data.package_id;
+
+        if(data.package_id) {
+            const packageService = new PackageService();
+            const packageResult = await packageService.getPackageByID(packageId);
+
+            if ('error' in packageResult) {
+                console.log(packageResult)
+    
+                return {
+                    error: `Fail to get package with id ${packageId}`,
+                    statusCode: ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR,
+                }
+            }
+
+            const linkedPackage = packageResult.data;
+            linkedPackage.active_delivery_id = deliveryResult._id.toString();
+
+            const updatedPackage = await packageService.updatePackage(linkedPackage, packageId);
+
+            if ('error' in updatedPackage) {
+                console.log(updatedPackage)
+    
+                return {
+                    error: `Fail to update the associate package of delivery with id ${deliveryResult._id} `,
+                    statusCode: ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR,
+                }
             }
         }
 

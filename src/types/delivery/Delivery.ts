@@ -4,7 +4,7 @@ import { DeliveryStatus } from './DeliveryStatus'
 
 export default interface DeliveryType {
     _id?: Types.ObjectId
-    package_id?: String
+    package_id?: string
     pickup_time: Date
     start_time: Date
     end_time: Date
