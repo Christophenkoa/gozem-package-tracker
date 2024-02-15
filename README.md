@@ -23,3 +23,8 @@
   email: driver@gmail.com
   password: password
 
+## evironment variables
+You can create a .env file in the root project and set the: 
+- MONGO_URL (the mongo db's url).
+- MONGO_DB_NAME (The mongoDb's database name).
+
