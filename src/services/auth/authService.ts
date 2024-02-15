@@ -23,11 +23,6 @@ export default class AuthService {
         return jwt.verify(bearerToken, APPCONFIGS.JWT.SECRET)
     }
 
-    private async hashPassword(password) {
-        const salt = await bcrypt.genSalt(12)
-        return await bcrypt.hash(password, salt)
-    }
-
     public async login(data: {
         email: string
         password: string

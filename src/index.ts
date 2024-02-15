@@ -16,7 +16,7 @@ class Server {
 
         this.app.use(
             cors({
-                origin: '*',
+                origin: APPCONFIGS.BASE_URL,
                 methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
             })
         )

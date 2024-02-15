@@ -9,11 +9,14 @@ const APPCONFIGS = {
         URL: process.env.MONGO_URL || 'mongodb://0.0.0.0:27017',
         DB_NAME: process.env.MONGO_DB_NAME || 'gozem_app',
     },
-    BASE_URL: process.env.BASE_URL || '',
+    BASE_URL: process.env.BASE_URL || 'http://localhost:4200',
     JWT: {
         EXPIRATION: 60 * 60 * 24 * 7,
         COOKIE_EXPIRATION: 360,
         SECRET: 'thesecret',
+    },
+    SOCKET: {
+        PORT: 3000,
     },
 }
 

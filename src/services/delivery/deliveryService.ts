@@ -1,6 +1,6 @@
 import { Delivery } from '../../models'
 import Mongo from '../../mongo'
-import { DeliveryType } from '../../types'
+import { DeliveryStatus, DeliveryType } from '../../types'
 import { ResponseCode } from '../../utils'
 
 export default class DeliveryService {
@@ -130,6 +130,59 @@ export default class DeliveryService {
 
         return {
             data: deletedDelivery,
+        }
+    }
+
+    async updateDeliveryStatus(
+        newStatus: DeliveryStatus,
+        delivery: DeliveryType,
+        deliveryId: string
+    ) {
+        const currentStatus = delivery.status
+        const deliveryService = new DeliveryService()
+        if (this.isValidStatusToUpdate(currentStatus, newStatus)) {
+            delivery.status = newStatus
+            if (newStatus === DeliveryStatus.pick_up) {
+                delivery.pickup_time = new Date()
+            } else if (
+                newStatus === DeliveryStatus.failed ||
+                newStatus === DeliveryStatus.delivered
+            ) {
+                delivery.end_time = new Date()
+            }
+
+            const updatedDelivery = await deliveryService.updateDelivery(
+                delivery,
+                deliveryId
+            )
+
+            if (!('error' in updatedDelivery)) {
+                return delivery
+            }
+
+            console.log(updatedDelivery.error)
+        }
+    }
+
+    isValidStatusToUpdate(
+        oldStatus: DeliveryStatus,
+        newStatus: DeliveryStatus
+    ): boolean {
+        switch (oldStatus) {
+            case DeliveryStatus.open:
+                return newStatus === DeliveryStatus.pick_up
+            case DeliveryStatus.pick_up:
+                return (
+                    newStatus === DeliveryStatus.in_transit ||
+                    newStatus === DeliveryStatus.failed
+                )
+            case DeliveryStatus.in_transit:
+                return (
+                    newStatus === DeliveryStatus.delivered ||
+                    newStatus === DeliveryStatus.failed
+                )
+            default:
+                return false
         }
     }
 }

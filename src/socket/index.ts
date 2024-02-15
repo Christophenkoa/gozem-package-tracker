@@ -2,11 +2,12 @@ import { Socket } from 'socket.io'
 import { Connection } from './connection'
 import { DeliveryService } from '../services'
 import { DeliveryStatus, DeliveryType, LocationType } from '../types'
+import { APPCONFIGS } from '../configs'
 
 class MySocket {
-    private _io = require('socket.io')(3000, {
+    private _io = require('socket.io')(APPCONFIGS.SOCKET.PORT, {
         cors: {
-            origin: ['http://localhost:4200'],
+            origin: [APPCONFIGS.BASE_URL],
         },
     })
 
@@ -78,25 +79,20 @@ class MySocket {
                     driverDelivery = result.data
 
                     if (payload.status !== driverDelivery.status) {
-                        //TODO: Check if the status change is allowed.
-                        driverDelivery.status = payload.status
-
                         const updatedDelivery =
-                            await deliveryService.updateDelivery(
+                            await deliveryService.updateDeliveryStatus(
+                                payload.status,
                                 driverDelivery,
                                 payload.delivery_id
                             )
 
-                        if ('error' in updatedDelivery) {
-                            console.log(updatedDelivery.error)
+                        if (!updatedDelivery) {
+                            return
                         }
+                    } else {
+                        return
                     }
                 }
-                this.deliveryUpdated({
-                    event: Connection.delivery_updated,
-                    delivery_object: driverDelivery,
-                })
-
                 this.deliveryUpdated({
                     event: Connection.delivery_updated,
                     delivery_object: driverDelivery,

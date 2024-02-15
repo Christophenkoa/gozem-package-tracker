@@ -1,4 +1,3 @@
-import { Schema } from 'mongoose'
 import { Package } from '../../models'
 import Mongo from '../../mongo'
 import { PackageType } from '../../types'
