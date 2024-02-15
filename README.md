@@ -1,4 +1,4 @@
-# gozem-package-tracker
+# Gozem-package-tracker
 - Before starting the server, ypu need to install [mongodb](https://www.mongodb.com/docs/manual/administration/install-community)
 - Use the default credential of mongo (nothing to configure as userb=name or password).
 - Next `cd` into the repo and run `npm i` to install the dependencies.
@@ -10,7 +10,7 @@
 - Complete unit test and create a fake database for testing.
 - complete authentication flow
 
-## credentials:
+## Credentials:
 - admin: 
   email: admin@gmail.com
   password: password
@@ -23,8 +23,12 @@
   email: driver@gmail.com
   password: password
 
-## evironment variables
-You can create a .env file in the root project and set the: 
+## Evironment variables
+You can create a `.env` file in the root project and set the: 
 - `MONGO_URL` (the mongo db's url).
 - `MONGO_DB_NAME` (The mongoDb's database name).
+
+# Documentations
+After running the project, you can view the doc here: `http://localhost:8000/docs`
+
 
