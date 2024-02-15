@@ -5,9 +5,9 @@
 - Make sure to free the 8000 port and run `npm run dev` for the development mode or `npm run build` follows by `npm run start` to run in production.
 
 ## Steps I didn't do cause of time:
-- dockerize everything and run the 2 repo with `docker-compose`
+- dockerize everything and run the 2 repo once with `docker-compose`
 - Use [Mongo cloud Atlas](https://www.mongodb.com/cloud/atlas) to host the database.
-- Complete unit test and create a fake database
+- Complete unit test and create a fake database for testing.
 - complete authentication flow
 
 ## credentials:
