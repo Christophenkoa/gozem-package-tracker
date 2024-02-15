@@ -2,9 +2,12 @@ import { ResponseCode } from '../../utils'
 import { DeliveryController } from '../../controllers'
 import express from 'express'
 import { DeliveryType } from '../../types'
+import { AppMiddlewares } from '../../middlewares'
 
 export default class DeliveryRoutes {
     public router: express.Router
+
+    adminAuthorization = new AppMiddlewares().authorizeUser('admin')
 
     constructor() {
         this.router = express.Router()
@@ -44,66 +47,86 @@ export default class DeliveryRoutes {
             }
         })
 
-        this.router.post('/', async (req, res, _next) => {
-            try {
+        this.router.post(
+            '/',
+            this.adminAuthorization,
+            async (req, res, _next) => {
+                try {
+                    const data: DeliveryType = req.body
+                    const deliveryResponse =
+                        await new DeliveryController().createDelivery(data)
+
+                    if ('error' in deliveryResponse) {
+                        return res.status(deliveryResponse.statusCode).send({
+                            errorMessage: deliveryResponse.error,
+                        })
+                    }
+
+                    return res.send(deliveryResponse)
+                } catch (e) {
+                    res.status(
+                        ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR
+                    ).send({
+                        error: 'Unknown Error',
+                    })
+                }
+            }
+        )
+
+        this.router.put(
+            '/:id',
+            this.adminAuthorization,
+            async (req, res, _next) => {
                 const data: DeliveryType = req.body
-                const deliveryResponse =
-                    await new DeliveryController().createDelivery(data)
+                try {
+                    const deliveryResponse =
+                        await new DeliveryController().updateDelivery(
+                            data,
+                            req.params.id
+                        )
 
-                if ('error' in deliveryResponse) {
-                    return res.status(deliveryResponse.statusCode).send({
-                        errorMessage: deliveryResponse.error,
+                    if ('error' in deliveryResponse) {
+                        return res.status(deliveryResponse.statusCode).send({
+                            errorMessage: deliveryResponse.error,
+                        })
+                    }
+
+                    return res.send(deliveryResponse)
+                } catch (e) {
+                    res.status(
+                        ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR
+                    ).send({
+                        error: 'Unknown Error',
                     })
                 }
-
-                return res.send(deliveryResponse)
-            } catch (e) {
-                res.status(ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR).send({
-                    error: 'Unknown Error',
-                })
             }
-        })
+        )
 
-        this.router.put('/:id', async (req, res, _next) => {
-            const data: DeliveryType = req.body
-            try {
-                const deliveryResponse =
-                    await new DeliveryController().updateDelivery(
-                        data,
-                        req.params.id
-                    )
+        this.router.delete(
+            '/:id',
+            this.adminAuthorization,
+            async (req, res, _next) => {
+                try {
+                    const deliveryResponse =
+                        await new DeliveryController().deleteDelivery(
+                            req.params.id
+                        )
 
-                if ('error' in deliveryResponse) {
-                    return res.status(deliveryResponse.statusCode).send({
-                        errorMessage: deliveryResponse.error,
+                    if ('error' in deliveryResponse) {
+                        return res.status(deliveryResponse.statusCode).send({
+                            errorMessage: deliveryResponse.error,
+                        })
+                    }
+
+                    return res.send(deliveryResponse)
+                } catch (e) {
+                    res.status(
+                        ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR
+                    ).send({
+                        error: 'Unknown Error',
                     })
                 }
-
-                return res.send(deliveryResponse)
-            } catch (e) {
-                res.status(ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR).send({
-                    error: 'Unknown Error',
-                })
             }
-        })
-
-        this.router.delete('/:id', async (req, res, _next) => {
-            try {
-                const deliveryResponse =
-                    await new DeliveryController().deleteDelivery(req.params.id)
-
-                if ('error' in deliveryResponse) {
-                    return res.status(deliveryResponse.statusCode).send({
-                        errorMessage: deliveryResponse.error,
-                    })
-                }
-
-                return res.send(deliveryResponse)
-            } catch (e) {
-                res.status(ResponseCode.HTTP_500_INTERNAL_SERVER_ERROR).send({
-                    error: 'Unknown Error',
-                })
-            }
-        })
+        )
     }
 }
